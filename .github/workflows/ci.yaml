@@ -1,0 +1,39 @@
+name: execute release actions
+permissions:
+  contents: write
+  checks: read
+
+on:
+  push:
+    branches:
+    - "**"
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - uses: frozengoats/ci-agent-actions/versioning@dev_actions
+      id: versioning
+
+    - uses: frozengoats/ci-agent-actions/is-default@dev_actions
+      id: is-default
+
+    - name: lint-check
+      run: make lint-check
+
+    - name: test
+      run: make test
+
+    - name: build binary
+      shell: bash
+      run: make build
+
+    - if: ${{ steps.is-default.outputs.is-default == 'true' }}
+      uses: frozengoats/ci-agent-actions/release@dev_actions
+      tags: "${{ steps.versioning.outputs.version }},${{ steps.versioning.outputs.version-major }}"
+      binary-path: ./bin/dummy
+      binary-name: agent-dummy
