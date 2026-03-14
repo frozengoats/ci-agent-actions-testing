@@ -34,6 +34,7 @@ jobs:
 
     - if: ${{ steps.is-default.outputs.is-default == 'true' }}
       uses: frozengoats/ci-agent-actions/release@dev_actions
-      tags: "${{ steps.versioning.outputs.version }},${{ steps.versioning.outputs.version-major }}"
-      binary-path: ./bin/dummy
-      binary-name: agent-dummy
+      with:
+        tags: "${{ steps.versioning.outputs.version }},${{ steps.versioning.outputs.version-major }}"
+        binary-path: ./bin/dummy
+        binary-name: agent-dummy
