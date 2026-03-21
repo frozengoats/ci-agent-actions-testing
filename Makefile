@@ -2,7 +2,8 @@ VERSION ?= $(shell cat ./VERSION)
 BIN := dummy
 MAJOR_VERSION ?= $(shell echo $(VERSION) | cut -d . -f1)
 GO_IMAGE := golang:1.25
-GO_RUN := docker run --rm -e CGO_ENABLED=0 -e HOME=$$HOME -v $$HOME:$$HOME -u $(shell id -u):$(shell id -g) -v $(shell pwd):/build -v /tmp:/tmp -v /var/run/docker.sock:/var/run/docker.sock -w /build $(GO_IMAGE) go
+DOCKER_RUN := docker run --rm -e CGO_ENABLED=0 -e HOME=$$HOME -v $$HOME:$$HOME -u $(shell id -u):$(shell id -g) -v $(shell pwd):/build -v /tmp:/tmp -v /var/run/docker.sock:/var/run/docker.sock -w /build
+GO_RUN_TEST := $(DOCKER_RUN) $(GO_IMAGE) go test
 GO_FILES := $(shell find . -type f -path **/*.go -not -path "./vendor/*")
 PACKAGES := $(shell go list ./...)
 
@@ -18,7 +19,8 @@ lint-check:
 build: bin/$(BIN)
 
 bin/$(BIN): $(GO_FILES)
-	$(GO_RUN) build -trimpath -ldflags="-s -w -X 'main.Version=$(VERSION)'" -mod=vendor -o ./bin/$(BIN) main.go
+	$(DOCKER_RUN) -e GOOS=windows -e GOARCH=amd64 $(GO_IMAGE) go build -trimpath -ldflags="-s -w -X 'main.Version=$(VERSION)'" -mod=vendor -o ./bin/$(BIN)-windows-amd64 main.go
+	$(DOCKER_RUN) -e GOOS=linux -e GOARCH=amd64 $(GO_IMAGE) go build -trimpath -ldflags="-s -w -X 'main.Version=$(VERSION)'" -mod=vendor -o ./bin/$(BIN)-linux-amd64 main.go
 
 .PHONY: clean
 clean:

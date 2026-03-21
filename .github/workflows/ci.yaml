@@ -36,5 +36,5 @@ jobs:
       uses: frozengoats/ci-agent-actions/release@dev_actions
       with:
         tags: "${{ steps.versioning.outputs.version }},${{ steps.versioning.outputs.version-major }}"
-        binary-path: ./bin/dummy
-        binary-name: agent-dummy
+        binary-paths: ./bin/dummy-windows-amd64,./bin/dummy-linux-amd64
+        binary-names: dummy-windows-amd64-${{ steps.versioning.outputs.version }},dummy-linux-amd64-${{ steps.versioning.outputs.version }}
