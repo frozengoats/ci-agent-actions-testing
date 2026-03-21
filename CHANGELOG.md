@@ -1,3 +1,5 @@
+# v0.0.7
+- fix tag ref for patch
 # v0.0.6
 - send content-length along with binary, requiring pre-calculation
 # v0.0.5
