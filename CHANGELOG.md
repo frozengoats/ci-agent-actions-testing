@@ -1,3 +1,5 @@
+# v0.0.4
+- verify that latest agent is being used
 # v0.0.3
 - re-run merge, fixed issues in ci-actions for binary location inputs
 # v0.0.2
