@@ -1,3 +1,5 @@
+# v0.0.5
+- submit full URL via path argument to uploader
 # v0.0.4
 - verify that latest agent is being used
 # v0.0.3
