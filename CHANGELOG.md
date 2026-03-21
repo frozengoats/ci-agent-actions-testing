@@ -1,3 +1,5 @@
+# v0.0.6
+- send content-length along with binary, requiring pre-calculation
 # v0.0.5
 - submit full URL via path argument to uploader
 # v0.0.4
